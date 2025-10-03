@@ -1,0 +1,55 @@
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/_next/static/media/d57a24ec54448a8e.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/_next/static/media/7c309a1f4c99f6b1.woff2') format('woff2');
+}
+
+/* Apply global font + background + text colors */
+html, body {
+  @apply font-atkinson bg-primary text-text;
+  scroll-behavior: smooth; /* smooth scrolling */
+  height: 100%;
+  overflow: hidden; /* hide default scrollbar */
+}
+
+/* Make main content scrollable but hide scrollbar */
+#root, main {
+  overflow-y: scroll;
+  height: 100%;
+}
+
+/* Chrome, Safari, Edge */
+body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+/* Firefox */
+body {
+  scrollbar-width: none; /* hide scrollbar but keep scroll */
+  -ms-overflow-style: none; /* IE/Edge legacy */
+}
+
+/* Glow effect */
+.glow {
+  text-shadow:
+    0 0 10px #c9cac7,
+    0 0 20px #c9cac7,
+    0 0 30px #c9cac7;
+}
+
+/* Auto-glow headings */
+h1, h2, h3 {
+  @apply glow;
+}
