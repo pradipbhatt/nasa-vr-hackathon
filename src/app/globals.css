@@ -14,7 +14,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: linear-gradient(135deg, #081a2a 0%, #01040a 100%);
     --foreground: #ededed;
   }
 }
