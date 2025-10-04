@@ -1,55 +1,157 @@
+@import "tailwindcss";
+
+/* ----------------------------- */
+/*   Local Fonts                 */
+/* ----------------------------- */
 @font-face {
-  font-family: 'Atkinson Hyperlegible';
+  font-family: 'Geist Sans';
   font-style: normal;
-  font-weight: 400;
+  font-weight: 100 900;
   font-display: swap;
-  src: url('/_next/static/media/d57a24ec54448a8e.woff2') format('woff2');
+  src: url('/fonts/GeistVF.woff') format('woff');
 }
 
 @font-face {
-  font-family: 'Atkinson Hyperlegible';
+  font-family: 'Geist Mono';
   font-style: normal;
-  font-weight: 700;
+  font-weight: 100 900;
   font-display: swap;
-  src: url('/_next/static/media/7c309a1f4c99f6b1.woff2') format('woff2');
+  src: url('/fonts/GeistMonoVF.woff') format('woff');
 }
 
-/* Apply global font + background + text colors */
-html, body {
-  @apply font-atkinson bg-primary text-text;
-  scroll-behavior: smooth; /* smooth scrolling */
-  height: 100%;
-  overflow: hidden; /* hide default scrollbar */
+/* ----------------------------- */
+/*   Root Variables & Themes     */
+/* ----------------------------- */
+:root {
+  /* Colors */
+  --color-bg: #ffffff;
+  --color-text: #171717;
+  --color-accent: #38bdf8; 
+  --scrollbar-track: rgba(0, 0, 0, 0.05);
+  --scrollbar-thumb: rgba(56, 189, 248, 0.3);
+  --scrollbar-thumb-hover: rgba(56, 189, 248, 0.6);
+
+  /* Fonts */
+  --font-sans: 'Geist Sans', sans-serif;   /* For headings & main text */
+  --font-mono: 'Geist Mono', monospace;   /* For code & monospace */
 }
 
-/* Make main content scrollable but hide scrollbar */
-#root, main {
-  overflow-y: scroll;
-  height: 100%;
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #0a0a0a;
+    --color-text: #ededed;
+    --scrollbar-track: rgba(255, 255, 255, 0.05);
+    --scrollbar-thumb: rgba(56, 189, 248, 0.25);
+    --scrollbar-thumb-hover: rgba(56, 189, 248, 0.5);
+  }
 }
 
-/* Chrome, Safari, Edge */
-body::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-  display: none;
-}
-
-/* Firefox */
+/* ----------------------------- */
+/*      Base Typography          */
+/* ----------------------------- */
 body {
-  scrollbar-width: none; /* hide scrollbar but keep scroll */
-  -ms-overflow-style: none; /* IE/Edge legacy */
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  transition: background 0.3s ease, color 0.3s ease;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Glow effect */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sans);
+  color: var(--color-text);
+  margin: 0 0 0.5em 0;
+}
+
+p, span, li {
+  font-family: var(--font-sans);
+}
+
+code, pre {
+  font-family: var(--font-mono);
+  background-color: rgba(56, 189, 248, 0.05);
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  overflow-x: auto;
+  color: var(--color-accent);
+  font-size: 0.95em;
+}
+
+/* ----------------------------- */
+/*        Scrollbar Styling      */
+/* ----------------------------- */
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+  border-radius: 4px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+/* ----------------------------- */
+/*   Utility Enhancements        */
+/* ----------------------------- */
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: rgba(56, 189, 248, 0.8);
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.2s ease, color 0.2s ease;
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+::selection {
+  background-color: var(--color-accent);
+  color: #fff;
+}
+
+/* Glow effect utility */
 .glow {
   text-shadow:
     0 0 10px #c9cac7,
     0 0 20px #c9cac7,
     0 0 30px #c9cac7;
-}
-
-/* Auto-glow headings */
-h1, h2, h3 {
-  @apply glow;
 }
