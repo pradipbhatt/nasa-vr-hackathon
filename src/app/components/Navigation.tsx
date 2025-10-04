@@ -31,11 +31,7 @@ const Navigation = ({ logo = "Vāyu", links = [], ctaLabel = "Launch VR", classN
   }, [lastScrollY]);
 
   return (
-    <nav
-      className={`fixed top-0 left-0 w-full z-50 flex items-center justify-between px-8 py-6 transition-transform duration-300 bg-black/60 backdrop-blur-md ${className} ${
-        isVisible ? "translate-y-0" : "-translate-y-full"
-      }`}
-    >
+    <nav className={`fixed top-0 left-0 w-full z-50 flex items-center justify-between px-8 py-6 transition-transform duration-300 bg-black/20 backdrop-blur-md ${className} ${isVisible ? "translate-y-0" : "-translate-y-full"}`}>
       <div className="flex items-center space-x-2">
         <Waves className="w-8 h-8 text-cyan-400" />
         <span className="text-2xl font-bold text-white">{logo}</span>
