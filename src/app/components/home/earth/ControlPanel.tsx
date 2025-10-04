@@ -19,9 +19,9 @@ const colors = {
   secondary: "#0a1f2d",
   accent: "rgba(56, 189, 248, 0.9)",
   accentDark: "#1e3a8a",
+  border: "rgba(56, 189, 248, 0.15)",
   text: "rgba(226, 232, 240, 0.95)",
   textMuted: "rgba(148, 163, 184, 0.8)",
-  border: "rgba(56, 189, 248, 0.15)",
 };
 
 interface ControlPanelProps {
@@ -42,8 +42,10 @@ interface ControlPanelProps {
   setEarthSpeed: (value: number) => void;
   cloudSpeed: number;
   setCloudSpeed: (value: number) => void;
-  glow: number;
-  setGlow: (value: number) => void;
+  glow: number; // Restored to fix TS error
+  setGlow: (value: number) => void; // Restored to fix TS error
+  glowIntensity: number; // Restored to fix TS error (unused, but kept for compatibility)
+  setGlowIntensity: (value: number) => void; // Restored to fix TS error (unused, but kept for compatibility)
   atmosphereOpacity: number;
   setAtmosphereOpacity: (value: number) => void;
   cloudOpacity: number;
@@ -52,7 +54,7 @@ interface ControlPanelProps {
   setLayerIntensity: (value: number) => void;
 }
 
-export const ControlPanel: React.FC<ControlPanelProps> = ({
+const ControlPanel = React.memo<ControlPanelProps>(({
   isMobile,
   isCollapsed,
   setIsCollapsed,
@@ -80,24 +82,24 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
   setLayerIntensity,
 }) => {
   const currentLayerConfig = dataLayers.find((l) => l.id === activeLayer) || dataLayers[0];
-
-  // Calculate panel size with mobile consideration
   const panelSize = isCollapsed ? 60 : isMobile ? Math.min(400, window.innerWidth * 0.9) : 320;
 
-  // Enhanced panel style with initial left gap
-  const enhancedPanelStyle = {
+  const enhancedPanelStyle: React.CSSProperties = {
     ...panelStyle,
-    left: `calc(${panelStyle.left || "24px"} + 16px)`, // Add 16px gap to left
+    left: `calc(${panelStyle.left || "24px"} + 16px)`,
     top: panelStyle.top || "24px",
     width: `${panelSize}px`,
     height: `${panelSize}px`,
     backgroundColor: colors.secondary,
     borderColor: isDragging ? colors.accent : colors.border,
     boxShadow: isDragging 
-      ? "0 20px 40px rgba(56, 189, 248, 0.15), 0 0 0 1px rgba(56, 189, 248, 0.1)"
-      : "0 8px 32px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(56, 189, 248, 0.1)",
-    willChange: isDragging ? "transform" : "auto",
-    filter: isDragging ? "brightness(1.1)" : "none",
+      ? "0 20px 40px rgba(56, 189, 248, 0.15)"
+      : "0 8px 32px rgba(0, 0, 0, 0.3)",
+  };
+
+  const toggleCollapse = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsCollapsed(!isCollapsed);
   };
 
   return (
@@ -115,26 +117,13 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
         style={{
           borderColor: colors.border,
           height: "60px",
-          backgroundColor: isDragging ? "rgba(30, 58, 138, 0.3)" : colors.primary,
+          backgroundColor: isDragging ? colors.accentDark : colors.primary,
           cursor: isDragging ? "grabbing" : "grab",
         }}
         onMouseDown={handleMouseDown}
         onTouchStart={handleTouchStart}
       >
-        {/* Left Section: Grip and Icon */}
-        <div className="flex items-center gap-3">
-          {/* Visual Grip Handle */}
-          <div className="flex items-center gap-1 opacity-60 mr-2">
-            {[1, 2, 3].map((dot) => (
-              <div
-                key={dot}
-                className="w-1 h-1 rounded-full"
-                style={{ backgroundColor: colors.accent }}
-              />
-            ))}
-          </div>
-          
-          {/* Icon Container */}
+        <div className="flex items-center gap-3 flex-1">
           <div
             className="p-2 rounded-lg backdrop-blur-sm transition-all duration-200"
             style={{ 
@@ -144,8 +133,6 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
           >
             {isMobile ? <GlobeIcon /> : <MoveIcon />}
           </div>
-          
-          {/* Title Section */}
           {!isCollapsed && !isMobile && (
             <div className="flex flex-col">
               <h2 className="text-sm font-semibold" style={{ color: colors.text }}>
@@ -160,27 +147,20 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
         
         {/* Collapse Button */}
         <button
-          onClick={(e) => {
-            e.stopPropagation();
-            setIsCollapsed(!isCollapsed);
-          }}
-          className="p-2 rounded-lg hover:bg-blue-900/30 active:bg-blue-900/40 transition-all duration-200 group"
+          onClick={toggleCollapse}
+          className="p-2 rounded-lg hover:bg-blue-900/30 active:bg-blue-900/40 transition-all duration-200"
           style={{ 
-            color: colors.text,
+            color: colors.text, 
             minWidth: "44px", 
             minHeight: "44px",
             transform: isDragging ? "scale(0.95)" : "scale(1)"
           }}
         >
-          {isCollapsed ? (
-            <ChevronUpIcon/>
-          ) : (
-            <ChevronDownIcon/>
-          )}
+          {isCollapsed ? <ChevronUpIcon /> : <ChevronDownIcon />}
         </button>
       </div>
 
-      {/* Content Section - Only when expanded */}
+      {/* Content Section */}
       {!isCollapsed && (
         <div
           className="overflow-y-auto custom-scrollbar"
@@ -191,25 +171,18 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
         >
           <div className="p-4 space-y-6 pb-6">
             {/* Data Layers Section */}
-            <SectionContainer title="Data Layers" count={dataLayers.length}>
+            <SectionContainer title="Data Layers">
               <div className="grid grid-cols-3 gap-2">
-                {dataLayers.map((layer) => {
-                  const Icon = layer.icon;
-                  const isActive = activeLayer === layer.id;
-                  
-                  return (
-                    <LayerButton
-                      key={layer.id}
-                      icon={Icon}
-                      label={layer.name.split(" ")[0]}
-                      isActive={isActive}
-                      onClick={() => setActiveLayer(layer.id)}
-                    />
-                  );
-                })}
+                {dataLayers.map((layer) => (
+                  <LayerButton
+                    key={layer.id}
+                    icon={layer.icon}
+                    label={layer.name.split(" ")[0]}
+                    isActive={activeLayer === layer.id}
+                    onClick={() => setActiveLayer(layer.id)}
+                  />
+                ))}
               </div>
-              
-              {/* Layer Description */}
               <DescriptionBox text={currentLayerConfig.description} />
             </SectionContainer>
 
@@ -223,7 +196,6 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                   onClick={() => setRotateEarth(!rotateEarth)}
                   accentColor={colors.accentDark}
                 />
-                
                 <ControlButton
                   icon={BarChartIcon}
                   label={showChart ? "Hide" : "Show"}
@@ -234,7 +206,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
             </SectionContainer>
 
             {/* Sliders Section */}
-            <SectionContainer title="Visual Controls" count={6}>
+            <SectionContainer title="Visual Controls">
               <div 
                 className="space-y-4 p-3 rounded-xl border"
                 style={{ 
@@ -242,18 +214,26 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                   backgroundColor: 'rgba(15, 41, 82, 0.1)' 
                 }}
               >
+                {/* Earth Speed - Reduced sensitivity */}
                 <ControlSlider
                   value={earthSpeed}
                   setValue={setEarthSpeed}
                   icon={GlobeIcon}
                   label="Rotation Speed"
+                  min={0}
+                  max={0.5}
+                  step={0.01}
                 />
                 <ControlSlider
                   value={cloudSpeed}
                   setValue={setCloudSpeed}
                   icon={CloudIcon}
                   label="Cloud Speed"
+                  min={0}
+                  max={1}
+                  step={0.01}
                 />
+                {/* Glow Slider - Restored */}
                 <ControlSlider
                   value={glow}
                   setValue={setGlow}
@@ -268,18 +248,27 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                   setValue={setAtmosphereOpacity}
                   icon={LayersIcon}
                   label="Atmosphere"
+                  min={0}
+                  max={1}
+                  step={0.01}
                 />
                 <ControlSlider
                   value={cloudOpacity}
                   setValue={setCloudOpacity}
                   icon={SunIcon}
                   label="Cloud Cover"
+                  min={0}
+                  max={1}
+                  step={0.01}
                 />
                 <ControlSlider
                   value={layerIntensity}
                   setValue={setLayerIntensity}
                   icon={currentLayerConfig.icon}
                   label="Data Intensity"
+                  min={0}
+                  max={1}
+                  step={0.01}
                 />
               </div>
             </SectionContainer>
@@ -288,36 +277,22 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
       )}
     </div>
   );
-};
+});
 
 // Reusable Section Container Component
 interface SectionContainerProps {
   title: string;
-  count?: number;
   children: React.ReactNode;
 }
 
-const SectionContainer: React.FC<SectionContainerProps> = ({ title, count, children }) => (
+const SectionContainer: React.FC<SectionContainerProps> = React.memo(({ title, children }) => (
   <div className="space-y-3">
-    <div className="flex items-center justify-between">
-      <label className="text-xs font-semibold uppercase tracking-wide" style={{ color: colors.text }}>
-        {title}
-      </label>
-      {count && (
-        <div 
-          className="text-[10px] px-2 py-1 rounded-full"
-          style={{ 
-            backgroundColor: "rgba(56, 189, 248, 0.1)",
-            color: colors.accent
-          }}
-        >
-          {count} items
-        </div>
-      )}
-    </div>
+    <label className="text-xs font-semibold uppercase tracking-wide" style={{ color: colors.text }}>
+      {title}
+    </label>
     {children}
   </div>
-);
+));
 
 // Reusable Layer Button Component
 interface LayerButtonProps {
@@ -327,41 +302,32 @@ interface LayerButtonProps {
   onClick: () => void;
 }
 
-const LayerButton: React.FC<LayerButtonProps> = ({ icon: Icon, label, isActive, onClick }) => (
+const LayerButton: React.FC<LayerButtonProps> = React.memo(({ icon: Icon, label, isActive, onClick }) => (
   <button
     onClick={onClick}
-    className={`p-2 rounded-xl transition-all duration-200 flex flex-col items-center gap-1.5 border-2 group relative overflow-hidden ${
+    className={`relative p-2 rounded-xl transition-all duration-200 flex flex-col items-center gap-1.5 border-2 group overflow-hidden ${
       isActive ? "ring-2 ring-offset-1 ring-offset-slate-900" : ""
     }`}
     style={{
-      backgroundColor: isActive
-        ? "rgba(56, 189, 248, 0.25)"
-        : "rgba(15, 41, 82, 0.3)",
-      borderColor: isActive
-        ? colors.accent
-        : "rgba(56, 189, 248, 0.1)",
+      backgroundColor: isActive ? "rgba(56, 189, 248, 0.25)" : "rgba(15, 41, 82, 0.3)",
+      borderColor: isActive ? colors.accent : colors.border,
       color: colors.text,
       minHeight: "64px",
       transform: isActive ? "scale(1.02)" : "scale(1)",
     }}
   >
-    {/* Active indicator */}
     {isActive && (
       <div 
         className="absolute top-1 right-1 w-2 h-2 rounded-full animate-pulse"
         style={{ backgroundColor: colors.accent }}
       />
     )}
-    
     <Icon className={`w-4 h-4 transition-all duration-200 ${
       isActive ? "scale-110" : "group-hover:scale-110"
     }`} />
-    
-    <span className="text-[10px] font-medium text-center leading-tight">
-      {label}
-    </span>
+    <span className="text-[10px] font-medium text-center leading-tight">{label}</span>
   </button>
-);
+));
 
 // Reusable Control Button Component
 interface ControlButtonProps {
@@ -372,7 +338,7 @@ interface ControlButtonProps {
   accentColor?: string;
 }
 
-const ControlButton: React.FC<ControlButtonProps> = ({ 
+const ControlButton: React.FC<ControlButtonProps> = React.memo(({ 
   icon: Icon, 
   label, 
   isActive, 
@@ -397,14 +363,14 @@ const ControlButton: React.FC<ControlButtonProps> = ({
     <Icon className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
     <span className="text-xs">{label}</span>
   </button>
-);
+));
 
 // Reusable Description Box Component
 interface DescriptionBoxProps {
   text: string;
 }
 
-const DescriptionBox: React.FC<DescriptionBoxProps> = ({ text }) => (
+const DescriptionBox: React.FC<DescriptionBoxProps> = React.memo(({ text }) => (
   <div 
     className="p-3 rounded-lg border backdrop-blur-sm"
     style={{
@@ -416,4 +382,6 @@ const DescriptionBox: React.FC<DescriptionBoxProps> = ({ text }) => (
       {text}
     </p>
   </div>
-);
+));
+
+export { ControlPanel };
