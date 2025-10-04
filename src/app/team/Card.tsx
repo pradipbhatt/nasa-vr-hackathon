@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { FaLinkedin, FaGithub, FaFacebook } from "react-icons/fa";
 
 type CardProps = {
@@ -16,7 +17,7 @@ const Card: React.FC<CardProps> = (props) => {
   return (
     <div className="bg-gray-200/10 border border-gray-300/20 p-4 rounded-lg shadow-md text-center w-80 h-82 relative flex flex-col justify-between hover:scale-105 transition-transform duration-200">
       <div className="flex flex-col items-center">
-        <img src={props.profile} alt="profile picture" className="w-30 h-30 rounded-full mx-auto mb-3 border-2 border-cyan-500" />
+        <Image src={props.profile} alt="profile picture" width={120} height={120} className="rounded-full mx-auto mb-3 border-2 border-cyan-500" />
         <h2 className="text-lg font-semibold">{props.name}</h2>
         <p className="text-base text-cyan-200 bg-cyan-300/10 rounded-full w-fit h-6 grid place-items-center px-4 mb-3">{props.role}</p>
         <p className="text-base">{props.description}</p>
