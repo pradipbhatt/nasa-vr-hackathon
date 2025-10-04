@@ -1,6 +1,6 @@
 export default function Contact() {
   return (
-    <div className="min-h-screen bg-primary text-text font-atkinson flex flex-col items-center justify-center gap-6 p-8 sm:p-20">
+    <div className="min-h-screen bg-primary text-text flex flex-col items-center justify-center gap-6 p-8 sm:p-20 --font-sans">
       <h1 className="text-4xl font-bold glow">Contact Us</h1>
       <p className="text-lg text-center max-w-lg">
         Reach out for questions, feedback, or collaboration. You can link your email, GitHub, or social profiles here.
