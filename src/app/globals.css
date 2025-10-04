@@ -22,11 +22,8 @@
 /* Dark mode overrides */
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-bg: #0a0a0a;
-    --color-text: #ededed;
-    --scrollbar-track: rgba(255, 255, 255, 0.05);
-    --scrollbar-thumb: rgba(56, 189, 248, 0.25);
-    --scrollbar-thumb-hover: rgba(56, 189, 248, 0.5);
+    --background: linear-gradient(135deg, #081a2a 0%, #01040a 100%);
+    --foreground: #ededed;
   }
 }
 
