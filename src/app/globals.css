@@ -149,9 +149,23 @@ html {
 }
 
 /* Utility classes for Tailwind integration */
+
 .font-sans {
   font-family: var(--font-sans), sans-serif;
 }
 .font-mono {
   font-family: var(--font-mono), monospace;
+}
+
+.font-sans { font-family: var(--font-sans), sans-serif; }
+.font-mono { font-family: var(--font-mono), monospace; }
+
+
+/* Add to your global CSS */
+.mix-blend-multiply {
+  mix-blend-mode: multiply;
+}
+
+.pointer-events-none {
+  pointer-events: none;
 }
