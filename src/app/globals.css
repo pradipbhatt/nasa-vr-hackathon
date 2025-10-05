@@ -3,6 +3,7 @@
 /* ----------------------------- */
 /*   Root Variables & Themes     */
 /* ----------------------------- */
+
 :root {
   /* Colors */
   --color-bg: #020204;
@@ -15,15 +16,22 @@
   --scrollbar-thumb-hover: rgba(56, 189, 248, 0.6);
 
   /* Fonts */
-  --font-sans: var(--font-geist-sans);   /* Geist Sans for headings & body */
-  --font-mono: var(--font-geist-mono);   /* Geist Mono for code/monospace */
+  --font-sans: var(--font-geist-sans); /* Geist Sans for headings & body */
+  --font-mono: var(--font-geist-mono); /* Geist Mono for code/monospace */
 }
 
 /* Dark mode overrides */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: linear-gradient(135deg, #081a2a 0%, #01040a 100%);
-    --foreground: #ededed;
+    /* Colors */
+    --color-bg: linear-gradient(135deg, #081a2a 0%, #01040a 100%);
+    --color-text: #ededed;
+    --color-accent: #38bdf8;
+
+    /* Scrollbar */
+    --scrollbar-track: rgb(18 28 43);
+    --scrollbar-thumb: rgb(56 189 248 / 26%);
+    --scrollbar-thumb-hover: rgb(0 177 255 / 57%);
   }
 }
 
@@ -33,7 +41,7 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: var(--color-bg);
+  background-image: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-sans), sans-serif;
   line-height: 1.6;
@@ -43,14 +51,20 @@ body {
 }
 
 /* Headings */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-sans), sans-serif;
   color: var(--color-text);
-  margin: 0 0 0.5em 0;
+  /* margin: 0 0 0.5em 0; */
 }
 
 /* Monospace / code blocks */
-code, pre {
+code,
+pre {
   font-family: var(--font-mono), monospace;
   background-color: rgba(56, 189, 248, 0.05);
   padding: 0.25em 0.5em;
@@ -135,6 +149,14 @@ html {
 }
 
 /* Utility classes for Tailwind integration */
+
+.font-sans {
+  font-family: var(--font-sans), sans-serif;
+}
+.font-mono {
+  font-family: var(--font-mono), monospace;
+}
+
 .font-sans { font-family: var(--font-sans), sans-serif; }
 .font-mono { font-family: var(--font-mono), monospace; }
 
