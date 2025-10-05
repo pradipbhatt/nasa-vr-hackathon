@@ -1,11 +1,11 @@
-"use client"
-import React, { useRef, useState, useEffect, useCallback } from 'react';
-import * as THREE from 'three';
-import { EndSection } from './ui/EndSection';
-import { UIControls } from './ui/UIControls';
-import { createScene, createLights, createCosmos, createBigBang, createNebula, createSolarSystem, createEarth, createImpact, createClimate, createOceanElements } from './utils/sceneSetup';
-import { SceneObjects } from './types';
-import { sections } from './sections/index';
+"use client";
+import React, { useRef, useState, useEffect, useCallback } from "react";
+import * as THREE from "three";
+import { EndSection } from "./ui/EndSection";
+import { UIControls } from "./ui/UIControls";
+import { createScene, createLights, createCosmos, createBigBang, createNebula, createSolarSystem, createEarth, createImpact, createClimate, createOceanElements } from "./utils/sceneSetup";
+import { SceneObjects } from "./types";
+import { sections } from "./sections/index";
 
 export default function EarthParallaxStory() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -33,7 +33,7 @@ export default function EarthParallaxStory() {
 
     const { scene, camera, renderer } = createScene(containerRef.current);
     const lights = createLights();
-    Object.values(lights).forEach(light => scene.add(light));
+    Object.values(lights).forEach((light) => scene.add(light));
 
     const cosmos = createCosmos(scene);
     const bigBang = createBigBang(scene);
@@ -45,7 +45,18 @@ export default function EarthParallaxStory() {
     const ocean = createOceanElements(scene);
 
     const sceneObjects: SceneObjects = {
-      scene, camera, renderer, lights, cosmos, bigBang, nebula, solarSystem, earth, impact, climate, ocean
+      scene,
+      camera,
+      renderer,
+      lights,
+      cosmos,
+      bigBang,
+      nebula,
+      solarSystem,
+      earth,
+      impact,
+      climate,
+      ocean,
     };
 
     const clock = new THREE.Clock();
@@ -67,7 +78,8 @@ export default function EarthParallaxStory() {
     // Touch and mouse controls
     let isDragging = false;
     let previousPosition = { x: 0, y: 0 };
-    let targetRotationX = 0, targetRotationY = 0;
+    let targetRotationX = 0,
+      targetRotationY = 0;
 
     const handleStart = (x: number, y: number) => {
       isDragging = true;
@@ -109,16 +121,16 @@ export default function EarthParallaxStory() {
       handleMove(touch.clientX, touch.clientY);
     };
 
-    renderer.domElement.addEventListener('mousedown', handleMouseDown);
-    renderer.domElement.addEventListener('mousemove', handleMouseMove);
-    renderer.domElement.addEventListener('mouseup', handleEnd);
-    renderer.domElement.addEventListener('touchstart', handleTouchStart);
-    renderer.domElement.addEventListener('touchmove', handleTouchMove);
-    renderer.domElement.addEventListener('touchend', handleEnd);
+    renderer.domElement.addEventListener("mousedown", handleMouseDown);
+    renderer.domElement.addEventListener("mousemove", handleMouseMove);
+    renderer.domElement.addEventListener("mouseup", handleEnd);
+    renderer.domElement.addEventListener("touchstart", handleTouchStart);
+    renderer.domElement.addEventListener("touchmove", handleTouchMove);
+    renderer.domElement.addEventListener("touchend", handleEnd);
 
     const animate = (currentTime: number) => {
       if (!isMounted) return;
-      
+
       const deltaTime = currentTime - lastFrameTime;
       if (deltaTime < frameInterval) {
         rafRef.current = requestAnimationFrame(animate);
@@ -188,12 +200,12 @@ export default function EarthParallaxStory() {
       cancelAnimationFrame(rafRef.current);
       window.removeEventListener("resize", handleResize);
       scrollRef.current?.removeEventListener("scroll", handleScroll);
-      renderer.domElement.removeEventListener('mousedown', handleMouseDown);
-      renderer.domElement.removeEventListener('mousemove', handleMouseMove);
-      renderer.domElement.removeEventListener('mouseup', handleEnd);
-      renderer.domElement.removeEventListener('touchstart', handleTouchStart);
-      renderer.domElement.removeEventListener('touchmove', handleTouchMove);
-      renderer.domElement.removeEventListener('touchend', handleEnd);
+      renderer.domElement.removeEventListener("mousedown", handleMouseDown);
+      renderer.domElement.removeEventListener("mousemove", handleMouseMove);
+      renderer.domElement.removeEventListener("mouseup", handleEnd);
+      renderer.domElement.removeEventListener("touchstart", handleTouchStart);
+      renderer.domElement.removeEventListener("touchmove", handleTouchMove);
+      renderer.domElement.removeEventListener("touchend", handleEnd);
       renderer.dispose();
       if (containerRef.current?.contains(renderer.domElement)) {
         containerRef.current.removeChild(renderer.domElement);
@@ -205,7 +217,7 @@ export default function EarthParallaxStory() {
     if (!scrollRef.current) return;
     const scrollHeight = scrollRef.current.scrollHeight - scrollRef.current.clientHeight;
     const targetScroll = (index / sections.length) * scrollHeight;
-    scrollRef.current.scrollTo({ top: targetScroll, behavior: 'smooth' });
+    scrollRef.current.scrollTo({ top: targetScroll, behavior: "smooth" });
   }, []);
 
   return (
@@ -223,33 +235,19 @@ export default function EarthParallaxStory() {
         </div>
       )}
 
-      <div ref={scrollRef} className="relative z-10 w-full h-screen overflow-y-auto scroll-smooth touch-auto" style={{ scrollbarWidth: 'thin', scrollbarColor: '#4a5568 #1a202c' }}>
-        <div style={{ height: '1300vh' }}>
+      <div ref={scrollRef} className="relative z-10 w-full h-screen overflow-y-auto scroll-smooth touch-auto" style={{ scrollbarWidth: "thin", scrollbarColor: "#4a5568 #1a202c" }}>
+        <div style={{ height: "1300vh" }}>
           <div className="sticky top-0 h-screen flex items-center justify-start px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 pointer-events-none">
             <div className="w-full max-w-[90%] sm:max-w-[80%] md:max-w-[600px] lg:max-w-[700px] xl:max-w-[800px]">
               {sections[currentSection] && (
-                <div
-                  key={currentSection}
-                  className="animate-fade-in transition-opacity duration-500"
-                  role="region"
-                  aria-label={`Story section: ${sections[currentSection].title}`}
-                >
+                <div key={currentSection} className="animate-fade-in transition-opacity duration-500" role="region" aria-label={`Story section: ${sections[currentSection].title}`}>
                   <div className="text-white">
-                    <div className="text-cyan-400 text-xs sm:text-sm md:text-base font-mono mb-3 tracking-widest opacity-90 uppercase">
-                      {sections[currentSection].subtitle}
-                    </div>
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black mb-4 tracking-tight drop-shadow-2xl bg-gradient-to-br from-purple-300 via-pink-300 to-blue-300 bg-clip-text text-transparent leading-tight">
-                      {sections[currentSection].title}
-                    </h2>
-                    <p className="text-sm sm:text-base md:text-lg lg:text-xl font-light leading-relaxed mb-4 md:mb-6 drop-shadow-lg">
-                      {sections[currentSection].description}
-                    </p>
+                    <div className="text-cyan-400 text-xs sm:text-sm md:text-base font-mono mb-3 tracking-widest opacity-90 uppercase">{sections[currentSection].subtitle}</div>
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black mb-4 tracking-tight drop-shadow-2xl bg-gradient-to-br from-purple-300 via-pink-300 to-blue-300 bg-clip-text text-transparent leading-tight">{sections[currentSection].title}</h2>
+                    <p className="text-sm sm:text-base md:text-lg lg:text-xl font-light leading-relaxed mb-4 md:mb-6 drop-shadow-lg">{sections[currentSection].description}</p>
                     <div className="flex flex-col gap-2 md:gap-3">
                       {sections[currentSection].facts.map((fact: string, i: number) => (
-                        <div
-                          key={i}
-                          className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg px-3 py-2 w-fit"
-                        >
+                        <div key={i} className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg px-3 py-2 w-fit">
                           <span className="text-xs sm:text-sm font-mono text-cyan-300">{fact}</span>
                         </div>
                       ))}
@@ -263,14 +261,7 @@ export default function EarthParallaxStory() {
         <EndSection />
       </div>
 
-      <UIControls
-        showControls={showControls}
-        setShowControls={setShowControls}
-        scrollProgress={scrollProgress}
-        currentSection={currentSection}
-        sections={sections}
-        scrollToSection={scrollToSection}
-      />
+      <UIControls showControls={showControls} setShowControls={setShowControls} scrollProgress={scrollProgress} currentSection={currentSection} sections={sections} scrollToSection={scrollToSection} />
     </div>
   );
 }

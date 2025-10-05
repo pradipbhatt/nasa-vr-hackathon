@@ -14,8 +14,6 @@ export default function VR() {
 
   return (
     <div className="relative w-full h-screen bg-primary text-text font-atkinson overflow-hidden">
-
-
       {/* VR / EarthStory Component */}
       <EarthStory />
     </div>
