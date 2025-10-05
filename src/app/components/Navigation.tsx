@@ -43,7 +43,7 @@ const Navigation = ({ logo = "Vāyu", links = [], ctaLabel = "Launch VR", classN
             {link.label}
           </Link>
         ))}
-        <Link href="/vr" className="px-6 py-2 bg-white text-black rounded-full font-semibold hover:bg-gray-200 transition-all hover:scale-105">
+        <Link href="/vr" className="px-6 py-2 bg-cyan-500/20 rounded-full font-semibold hover:bg-cyan-500/40 transition-all duration-200 hover:scale-105">
           {ctaLabel}
         </Link>
       </div>

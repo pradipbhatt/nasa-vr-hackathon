@@ -7,7 +7,7 @@ export default function Datasets() {
       <p className="text-lg leading-relaxed mb-4 text-center">
         Explore a variety of NASA ocean datasets that provide insights into sea surface temperature, chlorophyll concentration, ocean salinity, and sea level rise. These datasets are crucial for understanding the health of our oceans and the impact of climate change.
       </p>
-      <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-8">
+      <div className="mt-12 flex flex-wrap gap-8 justify-center">
         <Card icon="/icons/SST.svg" title="Sea Surface Temperature" description="Visualize global sea surface temperature patterns and anomalies over time." />
         <Card icon="/icons/CC.svg" title="Chlorophyll Concentration" description="Explore chlorophyll levels to understand phytoplankton distribution and ocean health." />
         <Card icon="/icons/OS.svg" title="Ocean Salinity" description="Analyze ocean salinity variations and their impact on marine ecosystems." />

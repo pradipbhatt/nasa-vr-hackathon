@@ -15,7 +15,7 @@ type CardProps = {
 
 const Card: React.FC<CardProps> = (props) => {
   return (
-    <div className="bg-gray-200/10 border border-gray-300/20 p-4 rounded-lg shadow-md text-center w-80 h-82 relative flex flex-col justify-between hover:scale-105 transition-transform duration-200">
+    <div className="bg-gray-200/10 border border-gray-300/20 p-4 rounded-lg shadow-md text-center min-w-[255px] w-full max-w-80 h-82 relative flex flex-col justify-between hover:scale-105 transition-transform duration-200">
       <div className="flex flex-col items-center">
         <Image src={props.profile} alt="profile picture" width={120} height={120} className="rounded-full mx-auto mb-3 border-2 border-cyan-500" />
         <h2 className="text-lg font-semibold">{props.name}</h2>
