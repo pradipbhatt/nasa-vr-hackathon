@@ -26,7 +26,7 @@ export default function ClientNavWrapper({ children, hideOnPaths = ["/vr"] }: Pr
           links={[
             { href: "/", label: "Home" },
             { href: "/about", label: "About" },
-            { href: "/vr", label: "VR" },
+            { href: "/story/chapter1", label: "Story" },
             { href: "/datasets", label: "Datasets" },
             { href: "/team", label: "Team" },
             { href: "/contact", label: "Contact" },
