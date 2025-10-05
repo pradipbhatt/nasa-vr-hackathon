@@ -457,7 +457,10 @@ export default function Scene12({ sceneRef }: SceneProps) {
                         return (
                           <div 
                             key={character.name}
-                            ref={el => characterCardsRef.current[index] = el}
+                             ref={(el) => {
+        sceneRef(el as HTMLDivElement | null)
+        containerRef.current = el as HTMLDivElement | null
+      }}
                             className={`bg-gradient-to-br from-white/10 to-transparent p-8 rounded-2xl border-2 ${charColor.border} transition-all duration-500 group relative overflow-hidden card-scroll-animate`}
                             style={{ animationDelay: `${index * 0.2}s` }}
                           >

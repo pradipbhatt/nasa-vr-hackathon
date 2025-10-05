@@ -324,7 +324,10 @@ export default function Scene2({ sceneRef }: SceneProps) {
 
         {/* Intro Section */}
         <div 
-          ref={el => sectionRefs.current[0] = el}
+           ref={(el) => {
+        sceneRef(el as HTMLDivElement | null)
+        containerRef.current = el as HTMLDivElement | null
+      }}
           className="min-h-screen flex items-center justify-center px-8 py-20"
         >
           <div className="max-w-4xl text-center">
@@ -351,7 +354,10 @@ export default function Scene2({ sceneRef }: SceneProps) {
           return (
             <div
               key={section.title}
-              ref={el => sectionRefs.current[index + 1] = el}
+               ref={(el) => {
+        sceneRef(el as HTMLDivElement | null)
+        containerRef.current = el as HTMLDivElement | null
+      }}
               className="min-h-[80vh] flex items-center justify-center px-8 py-16"
             >
               <div className="max-w-4xl w-full">
