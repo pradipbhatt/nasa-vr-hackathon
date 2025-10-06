@@ -405,28 +405,51 @@ export default function Scene4({ sceneRef }: SceneProps) {
         sceneRef(el as HTMLDivElement | null)
         containerRef.current = el as HTMLDivElement | null
       }}
-              className="min-h-[80vh] flex flex-col items-center justify-center px-4 md:px-8 py-16 relative"
+              className="min-h-[80vh] flex items-center justify-center px-4 md:px-8 py-12 md:py-16 relative"
             >
-              {section.image && (
-                <div
-                   ref={(el) => {
+              {section.image ? (
+                <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 items-start">
+                  {/* Image column */}
+                  <div className={`${index % 2 === 1 ? 'md:order-2' : 'md:order-1'} flex justify-center md:justify-start`}>
+                    <div
+                      ref={(el) => {
         sceneRef(el as HTMLDivElement | null)
         containerRef.current = el as HTMLDivElement | null
       }}
-                  className="parallax-image w-full max-w-xl mb-8"
-                >
-                  <img src={section.image} alt={section.title} className="w-full rounded-xl shadow-2xl" />
+                      className="parallax-image relative group self-start w-full md:max-w-xl lg:max-w-2xl"
+                    >
+                      <img src={section.image} alt={section.title} className="w-full rounded-2xl shadow-2xl" />
+                      <div className="absolute inset-0 border-4 border-white/10 rounded-2xl pointer-events-none" />
+                      <div className="absolute inset-2 border-2 border-white/5 rounded-xl pointer-events-none" />
+                    </div>
+                  </div>
+
+                  {/* Text column */}
+                  <div className={`${index % 2 === 1 ? 'md:order-1 md:text-right' : 'md:order-2'} flex flex-col justify-end self-end`}>
+                    <h2 className={`text-4xl md:text-5xl font-bold mb-2 text-center md:text-inherit text-reveal ${colorClasses.text}`}>
+                      {section.title}
+                    </h2>
+                    <h3 className={`text-lg md:text-2xl mb-3 md:mb-4 text-center md:text-inherit text-reveal ${colorClasses.text}`}>
+                      {section.subtitle}
+                    </h3>
+                    <p className={`max-w-2xl ${index % 2 === 1 ? 'ml-auto' : ''} text-center md:text-left text-base md:text-xl text-gray-300 text-reveal`}>
+                      {section.description}
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center">
+                  <h2 className={`text-4xl md:text-5xl font-bold mb-2 text-reveal ${colorClasses.text}`}>
+                    {section.title}
+                  </h2>
+                  <h3 className={`text-lg md:text-2xl mb-3 md:mb-4 text-reveal ${colorClasses.text}`}>
+                    {section.subtitle}
+                  </h3>
+                  <p className={`max-w-3xl mx-auto text-base md:text-xl text-gray-300 text-reveal`}>
+                    {section.description}
+                  </p>
                 </div>
               )}
-              <h2 className={`text-4xl md:text-5xl font-bold mb-2 text-center text-reveal ${colorClasses.text}`}>
-                {section.title}
-              </h2>
-              <h3 className={`text-xl md:text-2xl mb-4 text-center text-reveal ${colorClasses.text}`}>
-                {section.subtitle}
-              </h3>
-              <p className={`max-w-3xl text-center text-lg md:text-xl text-gray-300 text-reveal`}>
-                {section.description}
-              </p>
               {section.stats && (
                 <div className="flex flex-wrap justify-center mt-6 gap-4">
                   {section.stats.map((stat, i) => {

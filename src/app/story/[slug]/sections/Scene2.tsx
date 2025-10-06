@@ -358,21 +358,13 @@ export default function Scene2({ sceneRef }: SceneProps) {
         sceneRef(el as HTMLDivElement | null)
         containerRef.current = el as HTMLDivElement | null
       }}
-              className="min-h-[80vh] flex items-center justify-center px-8 py-16"
+              className="min-h-[80vh] flex items-center justify-center px-4 md:px-8 py-12 md:py-16"
+              data-aos="fade-up"
             >
-              <div className="max-w-4xl w-full">
-                <div className="text-center mb-8 text-reveal">
-                  <h2 className={`text-5xl md:text-6xl font-bold ${colorClasses.text} mb-4`}>
-                    {section.title}
-                  </h2>
-                  <p className="text-2xl text-white/90 italic">
-                    {section.subtitle}
-                  </p>
-                </div>
-                
-                {/* Image with alternating slide animation */}
-                <div className="relative group mb-8 flex justify-center">
-                  <div className="relative">
+              <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 items-start">
+                {/* Image column */}
+                <div className={`${index % 2 === 1 ? 'md:order-2' : 'md:order-1'} flex justify-center md:justify-start`}>
+                  <div className="relative group self-start w-full">
                     <img
                        ref={(el) => {
         sceneRef(el as HTMLDivElement | null)
@@ -380,21 +372,31 @@ export default function Scene2({ sceneRef }: SceneProps) {
       }}
                       src={section.image}
                       alt={section.title}
-                      className={`w-80 md:w-96 rounded-2xl shadow-2xl ${colorClasses.border} border-2 transition-all duration-300 group-hover:scale-105`}
+                      className={`w-full max-w-md md:max-w-xl lg:max-w-2xl rounded-2xl shadow-2xl ${colorClasses.border} border-2 transition-all duration-300 group-hover:scale-[1.03]`}
                       style={{ 
-                        filter: `drop-shadow(0 15px 40px rgba(16, 185, 129, 0.3))` 
+                        filter: `drop-shadow(0 15px 40px rgba(16, 185, 129, 0.35))` 
                       }}
                     />
-                    {/* Vintage Frame Effect */}
                     <div className="absolute inset-0 border-4 border-white/10 rounded-2xl pointer-events-none" />
                     <div className="absolute inset-2 border-2 border-white/5 rounded-xl pointer-events-none" />
                   </div>
                 </div>
 
-                <div className={`bg-black/70 backdrop-blur-md ${colorClasses.border} border-2 rounded-2xl p-8 max-w-2xl mx-auto scale-in`}>
-                  <p className="text-xl text-white leading-relaxed text-center text-reveal">
-                    {section.description}
-                  </p>
+                {/* Text column */}
+                <div className={`${index % 2 === 1 ? 'md:order-1 md:text-right' : 'md:order-2'} flex flex-col justify-end self-end`}>
+                  <div className="text-center md:text-inherit mb-4 md:mb-6 text-reveal" data-aos="fade-up">
+                    <h2 className={`text-4xl md:text-5xl font-bold ${colorClasses.text} mb-3 md:mb-4`}>
+                      {section.title}
+                    </h2>
+                    <p className="text-xl md:text-2xl text-white/90 italic">
+                      {section.subtitle}
+                    </p>
+                  </div>
+                  <div className={`bg-black/70 backdrop-blur-md ${colorClasses.border} border-2 rounded-2xl p-5 md:p-6 max-w-2xl ${index % 2 === 1 ? 'ml-auto' : ''} scale-in`} data-aos="fade-up" data-aos-delay="100">
+                    <p className="text-base md:text-xl text-white leading-relaxed text-center md:text-left text-reveal">
+                      {section.description}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -403,19 +405,19 @@ export default function Scene2({ sceneRef }: SceneProps) {
       </div>
 
       {/* Scene Indicator */}
-      <div className="absolute top-8 right-8 z-50 bg-gradient-to-r from-emerald-900/90 to-teal-800/90 px-6 py-3 rounded-xl backdrop-blur-lg border-2 border-emerald-400/60">
-        <div className="text-emerald-300 text-xl font-bold">SCENE 2</div>
-        <div className="text-emerald-200 text-sm">DISCOVERY</div>
+      <div className="absolute top-4 right-4 md:top-8 md:right-8 z-50 bg-gradient-to-r from-emerald-900/90 to-teal-800/90 px-3 py-2 md:px-6 md:py-3 rounded-xl backdrop-blur-lg border-2 border-emerald-400/60">
+        <div className="text-emerald-300 text-sm md:text-xl font-bold">SCENE 2</div>
+        <div className="text-emerald-200 text-xs md:text-sm">DISCOVERY</div>
       </div>
 
       {/* Progress Indicator */}
-      <div className="absolute top-8 left-8 z-50 bg-black/80 backdrop-blur-md px-4 py-3 rounded-xl border-2 border-emerald-500/50">
-        <div className="text-emerald-300 text-sm font-bold mb-2">EXPLORATION PROGRESS</div>
-        <div className="flex gap-2">
+      <div className="absolute top-4 left-1/2 -translate-x-1/2 md:translate-x-0 md:top-8 md:left-8 z-50 bg-black/80 backdrop-blur-md px-3 py-2 md:px-4 md:py-3 rounded-xl border-2 border-emerald-500/50">
+        <div className="text-emerald-300 text-xs md:text-sm font-bold mb-1 md:mb-2 text-center md:text-left">EXPLORATION PROGRESS</div>
+        <div className="flex gap-1.5 md:gap-2 justify-center md:justify-start">
           {['Reefs', 'Team', 'Research', 'Night', 'Life'].map((phase, i) => (
             <div 
               key={phase}
-              className={`w-2 h-2 rounded-full transition-all ${
+              className={`w-1.5 h-1.5 md:w-2 md:h-2 rounded-full transition-all ${
                 visibleSections.length > i + 1 ? 'bg-emerald-400 scale-125' : 'bg-gray-600'
               }`}
               title={phase}

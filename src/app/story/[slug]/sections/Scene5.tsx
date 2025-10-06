@@ -21,9 +21,9 @@ export default function Scene5({ sceneRef }: SceneProps) {
       const timeline = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
-          start: "top 60%",
-          end: "bottom 40%",
-          toggleActions: "play none none reverse"
+          start: "top top",
+          end: "bottom bottom",
+          scrub: 1
         }
       })
 

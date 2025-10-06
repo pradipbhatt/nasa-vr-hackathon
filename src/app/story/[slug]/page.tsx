@@ -1,7 +1,7 @@
 // src/app/story/[slug]/page.tsx
 'use client'
 
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import AOS from 'aos'
@@ -24,6 +24,9 @@ gsap.registerPlugin(ScrollTrigger)
 
 export default function Page() {
   const sceneRefs = useRef<(HTMLDivElement | null)[]>([])
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+  const [audioPlaying, setAudioPlaying] = useState(false)
+  const [audioVolume, setAudioVolume] = useState(0.35)
 
   useEffect(() => {
     AOS.init({ 
@@ -48,10 +51,41 @@ export default function Page() {
     return () => ScrollTrigger.getAll().forEach((t) => t.kill())
   }, [])
 
+  const toggleAudio = async () => {
+    if (!audioRef.current) return
+    try {
+      if (audioPlaying) {
+        audioRef.current.pause()
+        setAudioPlaying(false)
+      } else {
+        audioRef.current.volume = audioVolume
+        await audioRef.current.play()
+        setAudioPlaying(true)
+      }
+    } catch {}
+  }
+
+  const onVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const v = parseFloat(e.target.value)
+    setAudioVolume(v)
+    if (audioRef.current) audioRef.current.volume = v
+  }
+
   return (
     <main className="relative overflow-hidden">
       {/* Animated Background */}
       <div className="parallax-bg fixed inset-0 bg-gradient-to-b from-blue-900 via-purple-900 to-indigo-900 z-0" />
+
+      {/* Background Audio (Rain) */}
+      <audio ref={audioRef} loop preload="auto" src="/Rain(chosic.com).mp3" />
+      <div className="fixed bottom-4 left-4 z-50 flex items-center gap-3 px-3 py-2 rounded-full backdrop-blur-md md:gap-4 md:px-4 md:py-3"
+        style={{ background: 'rgba(0,0,0,0.45)', border: '1px solid rgba(255,255,255,0.15)' }}>
+        <button onClick={toggleAudio} className="text-white text-xs md:text-sm font-semibold px-3 py-1.5 rounded-full"
+          style={{ background: audioPlaying ? 'rgba(34,197,94,0.3)' : 'rgba(59,130,246,0.3)', border: '1px solid rgba(255,255,255,0.25)' }}>
+          {audioPlaying ? 'Pause rain' : 'Play rain'}
+        </button>
+        <input aria-label="Music volume" type="range" min="0" max="1" step="0.01" value={audioVolume} onChange={onVolumeChange} className="w-20 md:w-28" />
+      </div>
       
       <Scene1 sceneRef={(el: HTMLDivElement | null) => (sceneRefs.current[0] = el)} />
       <Scene2 sceneRef={(el: HTMLDivElement | null) => (sceneRefs.current[1] = el)} />

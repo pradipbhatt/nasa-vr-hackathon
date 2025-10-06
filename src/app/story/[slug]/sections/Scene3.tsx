@@ -518,7 +518,7 @@ export default function Scene3({ sceneRef }: SceneProps) {
           <div className="text-red-200 text-sm">PARADISE LOST</div>
         </div>
 
-        <div className="relative h-40 flex items-center justify-center">
+        <div className="relative h-28 md:h-40 flex items-center justify-center">
           <div className="relative w-1/3 max-w-md">
             <img
               ref={titleRef}
@@ -532,13 +532,13 @@ export default function Scene3({ sceneRef }: SceneProps) {
         </div>
 
         {/* Progress Indicator */}
-        <div className="absolute top-8 left-8 z-50 bg-black/80 backdrop-blur-md px-4 py-3 rounded-xl border-2 border-red-500/50">
-          <div className="text-red-300 text-sm font-bold mb-2">CRISIS PROGRESS</div>
-          <div className="flex gap-2">
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 md:translate-x-0 md:top-8 md:left-8 z-50 bg-black/80 backdrop-blur-md px-3 py-2 md:px-4 md:py-3 rounded-xl border-2 border-red-500/50">
+          <div className="text-red-300 text-xs md:text-sm font-bold mb-1 md:mb-2 text-center md:text-left">CRISIS PROGRESS</div>
+          <div className="flex gap-1.5 md:gap-2 justify-center md:justify-start">
             {['Pollution', 'Storm', 'Collapse', 'Tragedy', 'Awakening'].map((phase, i) => (
               <div 
                 key={phase}
-                className={`w-2 h-2 rounded-full transition-all ${
+                className={`w-1.5 h-1.5 md:w-2 md:h-2 rounded-full transition-all ${
                   visibleSections.length > i * 4 ? 'bg-red-400 scale-125' : 'bg-gray-600'
                 }`}
                 title={phase}
@@ -566,9 +566,9 @@ export default function Scene3({ sceneRef }: SceneProps) {
                 sceneRef(el as HTMLDivElement | null)
                 containerRef.current = el as HTMLDivElement | null
               }}
-              className="min-h-[80vh] flex items-center justify-center px-4 md:px-8 py-16 relative"
+              className="min-h-[80vh] flex items-center justify-center px-4 md:px-8 py-12 md:py-16 relative"
             >
-              <div className="max-w-4xl w-full">
+              <div className="max-w-6xl w-full">
                 {/* Intro Section */}
                 {section.id === 'intro' && (
                   <div className="text-center">
@@ -601,19 +601,10 @@ export default function Scene3({ sceneRef }: SceneProps) {
 
                 {/* Image Sections */}
                 {section.image && (
-                  <div>
-                    <div className="text-center mb-8 text-reveal">
-                      <h2 className={`text-4xl md:text-6xl font-bold ${colorClasses.text} mb-4`}>
-                        {section.title}
-                      </h2>
-                      <p className="text-xl md:text-2xl text-white/90 italic">
-                        {section.subtitle}
-                      </p>
-                    </div>
-                    
-                    {/* Smaller Image with alternating slide animation */}
-                    <div className="relative group mb-8 flex justify-center">
-                      <div className="relative">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 items-start">
+                    {/* Image column (top aligned) */}
+                    <div className={`${index % 2 === 1 ? 'md:order-2' : 'md:order-1'} flex justify-center md:justify-start`}>
+                      <div className="relative group self-start w-full">
                         <img
                           ref={(el) => {
                             sceneRef(el as HTMLDivElement | null)
@@ -621,22 +612,32 @@ export default function Scene3({ sceneRef }: SceneProps) {
                           }}
                           src={section.image}
                           alt={section.title}
-                          className={`parallax-image w-80 md:w-96 rounded-2xl shadow-2xl ${colorClasses.border} border-2 transition-all duration-300 group-hover:scale-105`}
+                          className={`parallax-image w-full max-w-md md:max-w-xl lg:max-w-2xl rounded-2xl shadow-2xl ${colorClasses.border} border-2 transition-all duration-300 group-hover:scale-[1.03]`}
                           style={{ 
-                            filter: `drop-shadow(0 15px 40px rgba(220, 38, 38, 0.4))`,
+                            filter: `drop-shadow(0 15px 40px rgba(220, 38, 38, 0.45))`,
                             boxShadow: `0 0 30px ${colorClasses.glow}`
                           }}
                         />
-                        {/* Vintage Frame Effect */}
                         <div className="absolute inset-0 border-4 border-white/10 rounded-2xl pointer-events-none" />
                         <div className="absolute inset-2 border-2 border-white/5 rounded-xl pointer-events-none" />
                       </div>
                     </div>
 
-                    <div className={`bg-black/70 backdrop-blur-md ${colorClasses.border} border-2 rounded-2xl p-6 md:p-8 max-w-2xl mx-auto scale-in`}>
-                      <p className="text-lg md:text-xl text-white leading-relaxed text-center text-reveal">
-                        {section.description}
-                      </p>
+                    {/* Text column (bottom aligned) */}
+                    <div className={`${index % 2 === 1 ? 'md:order-1 md:text-right' : 'md:order-2'} flex flex-col justify-end self-end`}>
+                      <div className="text-center md:text-inherit mb-4 md:mb-6 text-reveal">
+                        <h2 className={`text-4xl md:text-5xl font-bold ${colorClasses.text} mb-3 md:mb-4`}>
+                          {section.title}
+                        </h2>
+                        <p className="text-xl md:text-2xl text-white/90 italic">
+                          {section.subtitle}
+                        </p>
+                      </div>
+                      <div className={`bg-black/70 backdrop-blur-md ${colorClasses.border} border-2 rounded-2xl p-5 md:p-6 max-w-2xl ${index % 2 === 1 ? 'ml-auto' : ''} scale-in`}>
+                        <p className="text-base md:text-xl text-white leading-relaxed text-center md:text-left text-reveal">
+                          {section.description}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 )}

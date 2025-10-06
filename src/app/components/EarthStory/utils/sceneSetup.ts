@@ -1,30 +1,45 @@
 import * as THREE from "three";
 
 export function createScene(container: HTMLDivElement) {
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
   const scene = new THREE.Scene();
   scene.fog = new THREE.Fog(0x001122, 15, 80);
 
   const camera = new THREE.PerspectiveCamera(
     60,
-    window.innerWidth / window.innerHeight,
+    (container.clientWidth || window.innerWidth) / (container.clientHeight || window.innerHeight),
     0.1,
     1000
   );
   camera.position.set(0, 2, 25);
 
   const renderer = new THREE.WebGLRenderer({
-    antialias: true,
+    antialias: !isMobile, // disable MSAA on mobile to save memory
     alpha: false,
-    powerPreference: "high-performance"
+    powerPreference: isMobile ? "low-power" : "high-performance"
   });
   renderer.setClearColor(0x000022);
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(container.clientWidth || window.innerWidth, container.clientHeight || window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1.25 : 2));
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.4;
-  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.enabled = !isMobile; // disable expensive shadows on mobile
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   container.appendChild(renderer.domElement);
+
+  // Ensure canvas scales with container
+  renderer.domElement.style.width = '100%';
+  renderer.domElement.style.height = '100%';
+
+  // Handle resize
+  const onResize = () => {
+    const width = container.clientWidth || window.innerWidth;
+    const height = container.clientHeight || window.innerHeight;
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+    renderer.setSize(width, height);
+  };
+  window.addEventListener('resize', onResize, { passive: true });
 
   return { scene, camera, renderer };
 }
@@ -319,6 +334,7 @@ export function createSolarSystem(scene: THREE.Scene) {
 }
 
 export function createEarth(scene: THREE.Scene) {
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
   const loader = new THREE.TextureLoader();
   
   const earthMaterial = new THREE.MeshPhongMaterial({
@@ -331,7 +347,7 @@ export function createEarth(scene: THREE.Scene) {
     transparent: true,
     opacity: 0
   });
-  const earth = new THREE.Mesh(new THREE.SphereGeometry(1.2, 256, 256), earthMaterial);
+  const earth = new THREE.Mesh(new THREE.SphereGeometry(1.2, isMobile ? 96 : 256, isMobile ? 96 : 256), earthMaterial);
   earth.castShadow = true;
   earth.receiveShadow = true;
   scene.add(earth);
@@ -342,7 +358,7 @@ export function createEarth(scene: THREE.Scene) {
     opacity: 0,
     wireframe: true
   });
-  const moltenEarth = new THREE.Mesh(new THREE.SphereGeometry(1.22, 128, 128), moltenMaterial);
+  const moltenEarth = new THREE.Mesh(new THREE.SphereGeometry(1.22, isMobile ? 64 : 128, isMobile ? 64 : 128), moltenMaterial);
   scene.add(moltenEarth);
 
   const lavaGlowMaterial = new THREE.MeshBasicMaterial({
@@ -352,7 +368,7 @@ export function createEarth(scene: THREE.Scene) {
     side: THREE.BackSide,
     blending: THREE.AdditiveBlending
   });
-  const lavaGlow = new THREE.Mesh(new THREE.SphereGeometry(1.28, 64, 64), lavaGlowMaterial);
+  const lavaGlow = new THREE.Mesh(new THREE.SphereGeometry(1.28, isMobile ? 32 : 64, isMobile ? 32 : 64), lavaGlowMaterial);
   scene.add(lavaGlow);
 
   const atmosphereMaterial = new THREE.ShaderMaterial({
@@ -377,7 +393,7 @@ export function createEarth(scene: THREE.Scene) {
     side: THREE.BackSide,
     blending: THREE.AdditiveBlending
   });
-  const atmosphere = new THREE.Mesh(new THREE.SphereGeometry(1.45, 128, 128), atmosphereMaterial);
+  const atmosphere = new THREE.Mesh(new THREE.SphereGeometry(1.45, isMobile ? 64 : 128, isMobile ? 64 : 128), atmosphereMaterial);
   scene.add(atmosphere);
 
   const cloudsMaterial = new THREE.MeshPhongMaterial({

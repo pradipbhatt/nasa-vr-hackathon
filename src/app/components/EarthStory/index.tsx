@@ -63,7 +63,7 @@ export default function EarthParallaxStory() {
     let targetProgress = 0;
     let currentProgress = 0;
     let lastFrameTime = performance.now();
-    const targetFPS = 60;
+    const targetFPS = window.innerWidth < 768 ? 30 : 60;
     const frameInterval = 1000 / targetFPS;
 
     const handleScroll = debounce(() => {
@@ -73,7 +73,7 @@ export default function EarthParallaxStory() {
       targetProgress = scrollTop / scrollHeight;
     }, 16);
 
-    scrollRef.current?.addEventListener("scroll", handleScroll);
+    scrollRef.current?.addEventListener("scroll", handleScroll, { passive: true } as any);
 
     // Touch and mouse controls
     let isDragging = false;
@@ -221,7 +221,7 @@ export default function EarthParallaxStory() {
   }, []);
 
   return (
-    <div className="relative w-full h-screen bg-gradient-to-b from-indigo-950 to-blue-950 overflow-hidden">
+    <div className="relative w-full h-[70vh] md:h-screen bg-gradient-to-b from-indigo-950 to-blue-950 overflow-hidden">
       <div ref={containerRef} className="fixed inset-0 z-0 touch-none" />
 
       {isRotating && (
@@ -235,16 +235,16 @@ export default function EarthParallaxStory() {
         </div>
       )}
 
-      <div ref={scrollRef} className="relative z-10 w-full h-screen overflow-y-auto scroll-smooth touch-auto" style={{ scrollbarWidth: "thin", scrollbarColor: "#4a5568 #1a202c" }}>
+      <div ref={scrollRef} className="relative z-10 w-full h-[70vh] md:h-screen overflow-y-auto scroll-smooth touch-auto" style={{ scrollbarWidth: "thin", scrollbarColor: "#4a5568 #1a202c" }}>
         <div style={{ height: "1300vh" }}>
           <div className="sticky top-0 h-screen flex items-center justify-start px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 pointer-events-none">
-            <div className="w-full max-w-[90%] sm:max-w-[80%] md:max-w-[600px] lg:max-w-[700px] xl:max-w-[800px]">
+            <div className="w-full max-w-[95%] sm:max-w-[85%] md:max-w-[600px] lg:max-w-[700px] xl:max-w-[800px]">
               {sections[currentSection] && (
                 <div key={currentSection} className="animate-fade-in transition-opacity duration-500" role="region" aria-label={`Story section: ${sections[currentSection].title}`}>
                   <div className="text-white">
-                    <div className="text-cyan-400 text-xs sm:text-sm md:text-base font-mono mb-3 tracking-widest opacity-90 uppercase">{sections[currentSection].subtitle}</div>
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black mb-4 tracking-tight drop-shadow-2xl bg-gradient-to-br from-purple-300 via-pink-300 to-blue-300 bg-clip-text text-transparent leading-tight">{sections[currentSection].title}</h2>
-                    <p className="text-sm sm:text-base md:text-lg lg:text-xl font-light leading-relaxed mb-4 md:mb-6 drop-shadow-lg">{sections[currentSection].description}</p>
+                    <div className="text-cyan-300 text-[10px] sm:text-sm md:text-base font-mono mb-2 md:mb-3 tracking-widest opacity-90 uppercase">{sections[currentSection].subtitle}</div>
+                    <h2 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black mb-3 md:mb-4 tracking-tight drop-shadow-2xl bg-gradient-to-br from-purple-300 via-pink-300 to-blue-300 bg-clip-text text-transparent leading-tight">{sections[currentSection].title}</h2>
+                    <p className="text-[12px] sm:text-base md:text-lg lg:text-xl font-light leading-relaxed mb-3 md:mb-6 drop-shadow-lg">{sections[currentSection].description}</p>
                     <div className="flex flex-col gap-2 md:gap-3">
                       {sections[currentSection].facts.map((fact: string, i: number) => (
                         <div key={i} className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg px-3 py-2 w-fit">
